@@ -1,28 +1,21 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
 import './App.css';
 import Card from './Card';
 import Topbar from './Topbar';
+import CartList from './CartList';
+import { BrowserRouter,Switch,Route } from "react-router-dom";
+import { DataProvider } from './DataContext';
+import React from 'react';
 
 export default function App() {
-  const [datas, setDatas] = useState([]);
-  useEffect(() => {
-    let fetchData = async () => {
-      let main = await axios.get(`https://60f460de3cb0870017a8a216.mockapi.io/products`);
-      setDatas([...main.data]);
-    }
-    fetchData();
-  },[]);
   return (
-    <>
-      <Topbar></Topbar>
-      <div className="App">
-      {datas.map((el) => {
-        return (
-          <Card key={el.id} data={el}></Card>
-        );
-      })}
-      </div>
-    </>
+    <BrowserRouter>
+      <Switch>
+        <DataProvider>
+          <Topbar></Topbar>
+          <Route path="/" component={Card} exact={true}></Route>
+          <Route path="/cart" component={CartList} exact={true}></Route>
+        </DataProvider>
+      </Switch>
+    </BrowserRouter>
   );
 }
